@@ -1,5 +1,3 @@
-<img width="321" height="452" alt="TG_output" src="https://github.com/user-attachments/assets/436f5935-0d8c-4b66-9d45-f38affef4cc5" />
-<img width="674" height="265" alt="workflow_1 " src="https://github.com/user-attachments/assets/7c623176-a80b-47c1-a684-3594b5c9e3da" />
 AI News Automation using n8n and Llama 3
 
 Overview :
