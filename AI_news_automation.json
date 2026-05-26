@@ -1,0 +1,522 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 12
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        96
+      ],
+      "id": "a5e2380e-13cc-48ea-960c-241adbe6083f",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://www.producthunt.com/feed",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        224,
+        -192
+      ],
+      "id": "3b784bbb-48ef-4ef4-8d80-9b0174ea8ada",
+      "name": "Product Hunt RSS "
+    },
+    {
+      "parameters": {
+        "url": "https://huggingface.co/blog/feed.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "e04e93a4-c57e-4aa6-984d-316a8933039c",
+      "name": "HuggingFace RSS"
+    },
+    {
+      "parameters": {
+        "url": "https://www.reddit.com/r/artificial/.rss",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        224,
+        384
+      ],
+      "id": "7e43584a-7576-497d-9686-849f8eb9eaea",
+      "name": "Reddit AI_2 RSS"
+    },
+    {
+      "parameters": {
+        "numberInputs": 4
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        448,
+        64
+      ],
+      "id": "5223a92b-37e7-4237-91fa-a8f70e5420ec",
+      "name": "Merge sources"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d6cc3be7-7ea8-4e15-8937-f252395f8536",
+              "name": "title",
+              "value": "={{ $json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "86bbce6e-3b83-4a5f-88c6-461a45885e6c",
+              "name": "link",
+              "value": "={{ $json.link }}",
+              "type": "string"
+            },
+            {
+              "id": "21b03e30-e499-43a2-86c8-efa0279ba319",
+              "name": "source",
+              "value": "AI News",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        672,
+        96
+      ],
+      "id": "032d9fb6-669d-4d4a-9ca5-06a0974b9390",
+      "name": "Normalize Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map((item, index) => { return { json: { updateNumber: index + 1, title: item.json.title, contentSnippet: item.json.contentSnippet } }; });"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        96
+      ],
+      "id": "2ac15939-9779-4d70-a110-77a9d0301b55",
+      "name": "Prepare Articles"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c8f04c97-232f-4f6a-80c1-49237d62a340",
+              "leftValue": "={{$json[\"title\"]}}",
+              "rightValue": "Claude",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "516ffdb3-9bac-48c2-a761-b85b3f188970",
+              "leftValue": "={{$json[\"title\"]}}",
+              "rightValue": "GPT",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "1299613e-3f5f-46c4-b54e-e29fcecaa9fd",
+              "leftValue": "={{$json[\"title\"]}}",
+              "rightValue": "OpenAI",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "00a5f705-e536-4b2a-9616-0234e1be2976",
+              "leftValue": "={{$json[\"title\"]}}",
+              "rightValue": " AI model",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "b6f9fe0f-0409-4ffc-9b80-7c20b4b93108",
+              "leftValue": "={{$json[\"title\"]}}",
+              "rightValue": "AI startup",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "bd037848-b463-419c-bb81-27701d775d15",
+              "leftValue": "={{$json[\"title\"]}}",
+              "rightValue": "LLM",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "1d992c4a-bcc7-49d4-913d-17f7076fffee",
+              "leftValue": "={{$json[\"title\"]}}",
+              "rightValue": "Generative AI",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "69854e98-9368-47a0-822e-e316298181da",
+              "leftValue": "={{$json[\"title\"]}}",
+              "rightValue": "AI Automation",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "c2f4896f-5df7-47f6-a532-9c4478457c09",
+              "leftValue": "={{$json[\"title\"]}}",
+              "rightValue": "AI tool",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "2e8cc3c1-e251-450f-90ac-13e849b58dc7",
+              "leftValue": "={{$json[\"title\"]}}",
+              "rightValue": "AI Agents",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1120,
+        96
+      ],
+      "id": "4e39f576-6661-42b5-9260-618ce45e5b91",
+      "name": "Filter Relevant AI News"
+    },
+    {
+      "parameters": {
+        "jsCode": "const staticData = $getWorkflowStaticData('global');\n\nif (!staticData.sentUpdates) {\n  staticData.sentUpdates = {};\n}\n\nconst now = Date.now();\nconst oneDayAgo = now - 24 * 60 * 60 * 1000;\n\nconst freshItems = items\n  .filter(item => {\n    const dateValue = item.json.isoDate || item.json.pubDate || item.json.date;\n    if (!dateValue) return true;\n\n    const itemTime = new Date(dateValue).getTime();\n    return itemTime >= oneDayAgo;\n  })\n  .sort((a, b) => {\n    const dateA = new Date(a.json.isoDate || a.json.pubDate || 0).getTime();\n    const dateB = new Date(b.json.isoDate || b.json.pubDate || 0).getTime();\n    return dateB - dateA;\n  });\n\nconst newItems = [];\n\nfor (const item of freshItems) {\n  const uniqueId = item.json.guid || item.json.link || item.json.title;\n\n  if (!uniqueId) continue;\n\n  if (!staticData.sentUpdates[uniqueId]) {\n    staticData.sentUpdates[uniqueId] = now;\n    newItems.push(item);\n  }\n}\n\nreturn newItems.map((item, index) => {\n  return {\n    json: {\n      ...item.json,\n      updateNumber: index + 1\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1328,
+        96
+      ],
+      "id": "3c9b1908-5b5e-4a75-a641-bcfced548b6d",
+      "name": "Filter New Updates"
+    },
+    {
+      "parameters": {
+        "maxItems": 10
+      },
+      "id": "5e949b25-73e6-4f84-aab5-0d6ed90b27d9",
+      "name": "Limit to 10",
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        1552,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://scam-antarctic-faceplate.ngrok-free.dev/api/generate",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "{\n  \"Content-Type\": \"application/json\",\n  \"ngrok-skip-browser-warning\": \"true\"\n}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{\n{\n  \"model\": \"llama3\",\n  \"prompt\": \"Write ONE Telegram AI news update in 1-2 clear sentences. Make it specific, factual, and understandable to someone seeing it for the first time. Include the company, lab, product, or project name if clearly present. Explain what happened and why it matters. Do not invent ownership or facts. Do not use vague headlines like 'How they're built'. Do not include notes, labels, quotes, or intro text. Keep it between 25 and 40 words. Title: \" + $json.title + \". Summary: \" + ($json.contentSnippet || \"\"),\n  \"stream\": false,\n  \"options\": {\n    \"num_predict\": 90,\n    \"temperature\": 0.1\n  }\n}\n}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1776,
+        96
+      ],
+      "id": "a0c761ee-2d91-4e56-8a62-ab5ec1722928",
+      "name": "Generate AI Headlines",
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map((item, index) => {\n  let response =\n    item.json.response ||\n    item.json.body?.response ||\n    item.json.message?.content ||\n    item.json.body?.message?.content ||\n    \"\";\n\n  response = response\n    .replace(/Here is a summary of the news in one sentence:\\s*/i, \"\")\n    .replace(/Here is the one-line sentence summary:\\s*/i, \"\")\n    .replace(/Here is a one-sentence summary:\\s*/i, \"\")\n    .replace(/Here is a Telegram AI news update:\\s*/i, \"\")\n    .replace(/\\(Note:[\\s\\S]*?\\)/gi, \"\")\n    .replace(/Note:[\\s\\S]*/gi, \"\")\n    .replace(/^[\"']|[\"']$/g, \"\")\n    .trim();\n\n  return {\n    json: {\n      telegramMessage: `🔥 AI UPDATE ${index + 1}: ${response}`\n    }\n  };\n});"
+      },
+      "id": "30fd1a27-766b-4217-a147-81c024534e77",
+      "name": "Format Telegram Messages",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2000,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "1642296483",
+        "text": "={{$json.telegramMessage}}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2224,
+        96
+      ],
+      "id": "fad90e87-ea19-4dc8-9bf0-bb03923a2371",
+      "name": "Send Telegram Updates",
+      "webhookId": "af9cc5ae-3942-41c3-87b3-40f3db5138fb",
+      "credentials": {
+        "telegramApi": {
+          "id": "kQNtLwKuFk0VHv89",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://www.reddit.com/r/LocalLLaMA/.rss",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        224,
+        192
+      ],
+      "id": "ec018ecb-7f63-4315-b899-768fe725d8c5",
+      "name": "Reddit AI_1 RSS"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Reddit AI_2 RSS",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HuggingFace RSS",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Product Hunt RSS ",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Reddit AI_1 RSS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Product Hunt RSS ": {
+      "main": [
+        [
+          {
+            "node": "Merge sources",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HuggingFace RSS": {
+      "main": [
+        [
+          {
+            "node": "Merge sources",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Reddit AI_2 RSS": {
+      "main": [
+        [
+          {
+            "node": "Merge sources",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Merge sources": {
+      "main": [
+        [
+          {
+            "node": "Normalize Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Fields": {
+      "main": [
+        [
+          {
+            "node": "Prepare Articles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Articles": {
+      "main": [
+        [
+          {
+            "node": "Filter Relevant AI News",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Relevant AI News": {
+      "main": [
+        [
+          {
+            "node": "Filter New Updates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter New Updates": {
+      "main": [
+        [
+          {
+            "node": "Limit to 10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit to 10": {
+      "main": [
+        [
+          {
+            "node": "Generate AI Headlines",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate AI Headlines": {
+      "main": [
+        [
+          {
+            "node": "Format Telegram Messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Telegram Messages": {
+      "main": [
+        [
+          {
+            "node": "Send Telegram Updates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Telegram Updates": {
+      "main": [
+        []
+      ]
+    },
+    "Reddit AI_1 RSS": {
+      "main": [
+        [
+          {
+            "node": "Merge sources",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "ada1193c-4a2f-44d4-8498-3a88d7d93978",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "379d6847c5378b2d33f54be2683516b5e436bbce7fcd2f8e4a173ba5b6bc45c5"
+  },
+  "id": "od5q2P6r3vNn3OCV",
+  "tags": []
+}
